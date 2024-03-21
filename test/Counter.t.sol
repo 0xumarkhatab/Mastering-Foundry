@@ -2,6 +2,9 @@
 pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
+import {Vm} from "forge-std/Vm.sol";
+import {stdError} from "forge-std/StdError.sol";
+
 import {Counter} from "../src/Counter.sol";
 
 contract CounterTest is Test {
@@ -18,9 +21,18 @@ contract CounterTest is Test {
         console.log("test has been passed but yes let's change gta ");
     }
 
-    function testFuzz_SetNumber(uint256 x) public {
-        counter.setNumber(x);
-        assertEq(counter.number(), x);
+    function testFuzz_CanNotSetMoreThanUint256Max(uint256 x) public {
+        vm.assume(x > 0);
+        vm.expectRevert(stdError.arithmeticError);
+        counter.setNumber(x + type(uint256).max);
+        assertEq(counter.number(), x + type(uint256).max);
         console.log("test has been passed");
+    }
+
+    function test_ZeroAddressCanNotIncrement() public {
+        vm.prank(address(0));
+        vm.expectRevert(Counter.zeroAddressDetected.selector);
+        counter.increment();
+        vm.stopPrank();
     }
 }
