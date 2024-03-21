@@ -1,0 +1,1 @@
+forge test -w --match-path test/Counter.t.sol -vvvv
