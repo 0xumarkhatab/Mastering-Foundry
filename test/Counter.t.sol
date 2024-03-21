@@ -15,7 +15,7 @@ contract CounterTest is Test {
     function test_Increment() public {
         counter.increment();
         assertEq(counter.number(), 1);
-        console.log("test has been passed but yes let's changeee gta ");
+        console.log("test has been passed but yes let's change gta ");
     }
 
     function testFuzz_SetNumber(uint256 x) public {
